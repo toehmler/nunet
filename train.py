@@ -64,6 +64,12 @@ if __name__ == "__main__":
     if os.path.isdir(model_dir) == False:
         os.mkdir(model_dir)
         model = unet()
+        # save sumamry printout of model to directory
+        og_stdout = sys.stdout
+        with open("{}/{}_summary.txt", "w") as f:
+            sys.stdout = f
+            print(model.summary())
+            sys.stdout = og_stdout
     else:
         model = load_model("{}/{}".format(model_dir, model_str),
                            custom_objects={"dice_coef": dice_coef,
