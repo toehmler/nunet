@@ -81,8 +81,11 @@ def unet(input_size = (240,240,4)):
 if __name__ == "__main__":
 #    model_name = input('Model Name: ')
     unet_model = unet()
+    '''
     model_json = unet_model.to_json()
     with open('models/architectures/test_model.json','w') as json_file:
         json_file.write(model_json)
     unet_model.save_weights('models/weights/test_model_weights')
-    #unet_model.save('models/{}.h5'.format(model_name))
+    '''
+    unet_model.save('models/test')
+    unet_model.save_weights('models/test_w')

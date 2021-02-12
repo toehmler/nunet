@@ -7,6 +7,10 @@ import json
 import sys
 from sklearn.utils import class_weight
 import keras
+from metrics import dice_coef, dice_coef_loss
+import configparser
+import os
+
 
 # load config (used to get path to data and other model specifics)
 with open('config.json') as config_file:
@@ -50,21 +54,49 @@ def generate_data(start, end):
     return x,y
 
 if __name__ == "__main__":
-    model_name = sys.argv[1]
-    start_pat = int(sys.argv[2])
-    end_pat = int(sys.argv[3])
-    eps = int(sys.argv[4])
-    bs = int(sys.argv[5])
-    vs = float(sys.argv[6])
-    arch_path = 'models/architectures/test_model.json'
-    with open(arch_path, 'r') as json_file:
-        arch = json.load(json_file)
-        unet_model = keras.models.model_from_json(json.dumps(arch))
 
-#    unet_model = keras.models.model_from_json('models/architectures/test_model.json')
-    unet_model.load_weights('models/weights/test_model_weights')
+    # parse config file
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    model_str = "{}_v{}".format(config['model']['name'], config['model']['ver'])
+    model_dir = "models/{}".format(model_str)
+    lr = 1e-4
+    if os.path.isdir(model_dir) == False:
+        os.mkdir(model_dir)
+        model = unet()
+    else:
+        model = load_model("{}/{}".format(model_dir, model_str),
+                           custom_objects={"dice_coef": dice_coef,
+                                           "dice_coef_loss": dice_coef_loss})
+        model.load_weights("{}/{}_w".format(model_dir, model_str))
+        model.compile(optimizer=Adam(lr=lr), loss=dice_coef_loss, metrics=[dice_coef])
 
+    # parse config
+    eps = int(config['training']['epochs'])
+    bs = int(config['training']['batch_size'])
+    vs = float(config['training']['validation_size'])
+    start = int(config['training']['start'])
+    end = int(config['training']['end'])
+    interval = int(config['training']['interval'])
 
+    # write details to log file
+    log = open("{}/log.txt", "a+")
+    log.write("Model: {}_v{}".format(config['model']['name'],config['model']['ver']))
+    log.write("Epochs: {}".format(epochs))
+    log.write("Batch Size: {}".format(bs))
+    log.write("Validation split: {}".format(vs))
+    log.write("Starting patient no: {}".format(start))
+    log.write("Ending partient no: {}".format(end))
+    log.write("Interval:{}".format(interval))
 
-
+    # train on batches of patients with size __interval__
+    # model and weights are saved at each interval
+    cur_start = start
+    while cur_start < end
+        cur_end = min(cur_start+interval, end)
+        x,y = generate_data(cur_start, cur_end)
+        model.fit(x,y, epohs=eps, batch_size=bs, validation_size=vs, shuffle=True)
+        model.save("{}/{}".format(model_dir, model_str))
+        model.save_weights("{}/{}_w".format(model_dir, model_str))
+        cur_start += interval
 
