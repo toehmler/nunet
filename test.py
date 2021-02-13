@@ -18,8 +18,10 @@ if __name__ == "__main__":
     model.load_weights("{}/{}_w".format(model_dir, model_str))
     model.compile(optimizer=Adam(lr=lr), loss=dice_coef_loss, metrics=[dice_coef])
 
-
     # open file to write test results to
-    
+
+    # save testing outputs to csv
+
+
 
 

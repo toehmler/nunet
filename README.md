@@ -12,8 +12,6 @@ sudo apt update
 sudo apt install python3-pip awscli
 ```
 Configure AWS credentials and download data
-Enter AWS Access Key ID: AKIAIVH4JK53VC4FH32A
-Secret Access Key: 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
 Default reion name and default output format can be left blank
 ```
 aws configure
