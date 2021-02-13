@@ -1,0 +1,1 @@
+Model: unet_v0.1Epochs: 20Batch Size: 128Validation split: 0.25Starting patient no: 0Ending partient no: 40Interval:40Model: unet_v0.1Epochs: 20Batch Size: 128Validation split: 0.25Starting patient no: 40Ending partient no: 120Interval:40Model: unet_v0.1Epochs: 20Batch Size: 128Validation split: 0.25Starting patient no: 40Ending partient no: 120Interval:40
