@@ -1,0 +1,1 @@
+Model: unet_v0.2Epochs: 30Batch Size: 32Validation split: 0.25Starting patient no: 0Ending partient no: 200Interval:40
