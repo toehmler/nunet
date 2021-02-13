@@ -85,8 +85,8 @@ if __name__ == "__main__":
     end = int(config['training']['end'])
     interval = int(config['training']['interval'])
 
-    # write details to log file
-    log = open("{}/log.txt", "a+")
+    # write details to log file (seperate from tensorboard logs)
+    log = open("{}/log.txt".format(model_dir), "a+")
     log.write("Model: {}_v{}".format(config['model']['name'],config['model']['ver']))
     log.write("Epochs: {}".format(epochs))
     log.write("Batch Size: {}".format(bs))
@@ -101,7 +101,13 @@ if __name__ == "__main__":
     while cur_start < end
         cur_end = min(cur_start+interval, end)
         x,y = generate_data(cur_start, cur_end)
-        model.fit(x,y, epohs=eps, batch_size=bs, validation_size=vs, shuffle=True)
+
+        # tensorboard configuration (needs 
+        tb_log_dir = "{}/tb_logs/fit/".format(model_dir) + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        tb_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
+        model.fit(x,y, epohs=eps, batch_size=bs, validation_size=vs, shuffle=True
+                  callbacks=[tb_callback])
         model.save("{}/{}".format(model_dir, model_str))
         model.save_weights("{}/{}_w".format(model_dir, model_str))
         cur_start += interval
