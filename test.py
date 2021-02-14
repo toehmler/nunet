@@ -6,17 +6,17 @@ from tqdm import tqdm
 from keras.models import load_model
 import csv
 from model import *
+from metrics import dice_coef, dice_coef_loss
+import datetime
+from glob import glob
 from metrics import *
-
-with open('employee_file.csv', mode='w') as employee_file:
-    employee_writer = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
-    employee_writer.writerow(['John Smith', 'Accounting', 'November'])
-    employee_writer.writerow(['Erica Meyers', 'IT', 'March'])
+from data import *
 
 # load config (used to get path to data and other model specifics)
 with open('config.json') as config_file:
     jconfig = json.load(config_file)
+
+lr = 1e-4
 
 if __name__ == "__main__":
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     config.read('config.ini')
 
     # load model to test
-    model_str = "{}/_v{}".format(cofig['model']['name'], config['model']['ver'])
+    model_str = "{}_v{}".format(config['model']['name'], config['model']['ver'])
     model_dir = "models/{}".format(model_str)
     model = load_model("{}/{}".format(model_dir, model_str),
                        custom_objects={"dice_coef": dice_coef,
@@ -35,24 +35,25 @@ if __name__ == "__main__":
     # open file to write test results to
     result_filename = "{}/{}_{}.csv".format(model_dir, model_str,
                       datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-    with open(result_filename, mode="w+") as result_file:
+    with open(result_filename, mode="a+") as result_file:
         result_writer = csv.writer(result_file, delimiter=',',
                                    quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    result_writer.writerow(['dice_whole','dice_enhancing','dice_core',
-                            'sen_whole','sen_enhancing','sen_score',
-                            'spec_whole','spec_enhancing','spec_core'])
-    # parse config file
+        result_writer.writerow(['dice_whole','dice_enhancing','dice_core',
+                                'sen_whole','sen_enhancing','sen_score',
+                                'spec_whole','spec_enhancing','spec_core'])
 
-    start = config['testing']['start']
-    end = config['testing']['end']
+
+    # parse config file
+    start = int(config['testing']['start'])
+    end = int(config['testing']['end'])
     current = start
     pbar = tqdm(total = (end - start))
     dw = 0
     de = 0
     dc = 0
-    sen_w = 0
-    sen_e = 0
-    sen_c = 0
+    sn_w = 0
+    sn_e = 0
+    sn_c = 0
     sp_w = 0
     sp_e = 0
     sp_c = 0
@@ -85,9 +86,12 @@ if __name__ == "__main__":
         spec_en = specificity_en(pred, gt)
         spec_core = specificity_core(pred, gt)
 
-        result_writer.writerow([dice_whole,dice_en,dice_core,
-                               sen_whole,sen_en,sen_core,
-                               spec_whole,spec_en,spec_core])
+        with open(result_filename, mode="a+") as result_file:
+            result_writer = csv.writer(result_file, delimiter=',',
+                                       quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            result_writer.writerow([dice_whole,dice_en,dice_core,
+                                   sen_whole,sen_en,sen_core,
+                                   spec_whole,spec_en,spec_core])
 
 
         dw += dice_whole
@@ -98,7 +102,7 @@ if __name__ == "__main__":
         sn_c += sen_core
         sp_w += spec_whole
         sp_e += spec_en
-        sp_c += wpec_c
+        sp_c += spec_core
         current += 1
         pbar.update(1)
 
