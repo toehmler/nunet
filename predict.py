@@ -71,6 +71,9 @@ if __name__ == "__main__":
         prediction = np.argmax(prediction, axis=-1)
 
         scan = test_slice[0,:,:,0]
+        save_mask(scan, prediction, patient_no, out_path, model_str, slice_no)
+
+        '''
         label = test_label[0]
         im = plt.figure(figsize=(15,10))
         plt.subplot(131)
@@ -84,6 +87,7 @@ if __name__ == "__main__":
         plt.imshow(prediction, cmap='gray')
         plt.savefig('{}/{}_pat{}_slice{}.png'.format(out_path, model_str, patient_no, slice_no), bbox_inches='tight')
         plt.close(im)
+        '''
         pbar.update(1)
     pbar.close()
 
