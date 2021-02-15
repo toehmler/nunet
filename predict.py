@@ -5,7 +5,7 @@ from data import *
 from metrics import dice_coef, dice_coef_loss
 from glob import glob
 import numpy as np
-import matplotliby.pyplot as plt
+import matplotlib.pyplot as plt
 
 
 def save_mask(bg, mask, patient_no, out_path, model_str, slice_no):
@@ -37,8 +37,6 @@ def save_mask(bg, mask, patient_no, out_path, model_str, slice_no):
 
 
 
-
-
 if __name__ == "__main__":
     patient_no = input("Patient no: ")
 
@@ -61,7 +59,7 @@ if __name__ == "__main__":
     root = config['general']['root_path']
     out_path = config['general']['image_out_path']
     path_str = "{}/*pat{}*".format(root, patient_no)
-    path = glob(path_str)[1]
+    path = glob(path_str)[0]
     scans = norm_scans(load_scans(path))
     pbar = tqdm(total = scans.shape[0])
 
@@ -71,22 +69,22 @@ if __name__ == "__main__":
         prediction = model.predict(test_slice, batch_size=32)[0]
         prediction = np.around(prediction)
         prediction = np.argmax(prediction, axis=-1)
-        gt.extend(test_label[0])
-        pred.extend(prediction)
 
-
+        scan = test_slice[0,:,:,0]
+        label = test_label[0]
         im = plt.figure(figsize=(15,10))
-        im = plt.subplot(131)
-        im = plt.title('Input')
-        im = plt.imshow(scan, cmap='gray')
-        im = plt.subplot(132)
-        im = plt.title('Ground Truth')
-        im = plt.imshow(label, cmap='gray')
-        im = plt.subplot(133)
-        im = plt.title('Prediction')
-        im = plt.imshow(prediction, cmap='gray')
-        plt.savefig('outputs/{}_pat{}_slice{}.png'.format(model_str, patient_no, slice_no), bbox_inches='tight')
+        plt.subplot(131)
+        plt.title('Input')
+        plt.imshow(scan, cmap='gray')
+        plt.subplot(132)
+        plt.title('Ground Truth')
+        plt.imshow(label, cmap='gray')
+        plt.subplot(133)
+        plt.title('Prediction')
+        plt.imshow(prediction, cmap='gray')
+        plt.savefig('{}/{}_pat{}_slice{}.png'.format(out_path, model_str, patient_no, slice_no), bbox_inches='tight')
         plt.close(im)
         pbar.update(1)
+    pbar.close()
 
 
