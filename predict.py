@@ -6,6 +6,8 @@ from metrics import dice_coef, dice_coef_loss
 from glob import glob
 import numpy as np
 import matplotlib.pyplot as plt
+from skimage.exposure import adjust_gamma, rescale_intensity
+from skimage import color
 
 
 def save_mask(bg, mask, patient_no, out_path, model_str, slice_no):
@@ -33,7 +35,8 @@ def save_mask(bg, mask, patient_no, out_path, model_str, slice_no):
     for i in range(fours.shape[0]):
         bg_copy[fours[i][0]][fours[i][1]] = yellow
     plt.imshow(bg_copy)
-    plt.savefig('{}/{}_pat{}_slice{}.png'.format(out_path, model_str, patient, slice_no))
+    plt.savefig('{}/{}_pat{}_slice{}.png'.format(out_path, model_str, patient_no, slice_no))
+    plt.close(fig)
 
 
 
