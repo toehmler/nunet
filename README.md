@@ -84,14 +84,13 @@ This will compile a new model and save a summary and its architecture in a new d
 If a model of a given name and version already exists when training, that model is loaded, otherwise a new model is compiled.
 
 **Training**   
-Due to the large file size of the MRI scans and limitations on RAM, training is done in groups. See [Training](#Training) for more information.
 * `start` : The index of the patient to start training with
 * `end` : The index of the patient to end training with
 * `interval` : How many patients to train in each group (if not an even divisor of the total number the last group will be the size of the remainder)
 * `epochs` : Number of epochs to train for *per group*
 * `batch_size` : The batch size to train the model using *per group*   
 * `validation_split` : The split to use to create the validation data (0-1), done on *per group* basis
-
+Due to the large file size of the MRI scans and limitations on RAM, training is done in groups. See [Training](#Training) for more information.
 **Testing**
 * `start` : The start index of the patient to test on
 * `end` : The end index of the patient to test on
