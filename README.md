@@ -83,7 +83,7 @@ This will compile a new model and save a summary and its architecture in a new d
 * `ver` : The version number of the current model being trained, tested, or used for predictions
 If a model of a given name and version already exists when training, that model is loaded, otherwise a new model is compiled.
 
-**Training**
+**Training**   
 Due to the large file size of the MRI scans and limitations on RAM, training is done in groups. See [Training](#Training) for more information.
 * `start` : The index of the patient to start training with
 * `end` : The index of the patient to end training with
