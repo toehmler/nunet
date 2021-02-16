@@ -5,17 +5,23 @@ This project demonstrates the implementation of a 2D UNet Convolution Neural Net
 ![unet_v0.2_pat206](./outputs/unet_v0.2_pat206.gif)
 
 ## Background / Overview
+
 ### What is brain tumor segmentation?
+
 * What is brain tumor segmentation?
 	* Process of separating healthy / normal brain tissues from tumor
 	* Difficult because of irregular form and confusing boundaries of tumors
 	* Time consuming for a radiologist to manually segment 
 	* Segmentation tasks are ripe for machine learning / CNNs
+
 ### Data structure
+
 * Explanation of data structure
 
 ## Installation
+
 ### Requirements
+
 * GNU Make
 * Python 3.7.9
 * Tensorflow 2.4.0
@@ -27,6 +33,7 @@ This project demonstrates the implementation of a 2D UNet Convolution Neural Net
 * tqdm
 
 ### Setup
+
 1. Install [Tensorflow](tensorflow.org), it is recommended that you have version 2.4.0+
 2. Install [Keras](keras.io), it is recommended  that you have version 2.4.0+
 3. Install [CUDA](https://www.tensorflow.org/install/gpu) and configure GPU support for tensorflow. It is recommended that you have version 11.0+
@@ -45,12 +52,14 @@ python3 process.py <path_to_data> <n4itk=False>
 ```
 8. Set `path_to_data`  in `config.ini`  to be the full path to the downloaded dataset.
 
-## Quick Start
+## Usage 
 
 * Generate predictions using pre trained models
 * Train and test a new model
 * Train a new model
 * Test a model
+
+### Quick Start
 
 The project relies on the values in `config.ini` to operate properly. Updating these values will change which model is being trained, tested or used for predictions. Additional parameters for training can be found here as well (batch size, validation split, etc.).  See [Configuration Options](#Configuration-Options) for a more detailed explanation of each option.
 
@@ -74,12 +83,26 @@ This will compile a new model and save a summary and its architecture in a new d
 * `ver` : The version number of the current model being trained, tested, or used for predictions
 If a model of a given name and version already exists when training, that model is loaded, otherwise a new model is compiled.
 
+**Training**
+Due to the large file size of the MRI scans and limitations on RAM, training is done in groups. See [Training](#Training) for more information.
+* `start` : The index of the patient to start training with
+* `end` : The index of the patient to end training with
+* `interval` : How many patients to train in each group (if not an even divisor of the total number the last group will be the size of the remainder)
+* `epochs` : Number of epochs to train for *per group*
+* `batch_size` : The batch size to train the model using *per group*   
+* `validation_split` : The split to use to create the validation data (0-1), done on *per group* basis
+
+**Testing**
+* `start` : The start index of the patient to test on
+* `end` : The end index of the patient to test on
+
 * Explanation of how to train
 * Explanation of how to test
 * Explanation how to test pre-trained models
 * Explanation of how to predict specific patient
 
 ## Dataset
+
 The MRI data used to train this model was provided by the [2015 MICCAI BRaTS Challenge](http://www.braintumorsegmentation.org) 
 
 
