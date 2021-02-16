@@ -54,14 +54,9 @@ python3 process.py <path_to_data> <n4itk=False>
 
 ## Usage 
 
-* Generate predictions using pre trained models
-* Train and test a new model
-* Train a new model
-* Test a model
+The project relies on the values in `config.ini` to operate properly. Updating these values will change which model is being trained, tested or used for predictions. Additional parameters for training can be found here as well (batch size, validation split, etc.).  See [Configuration Options](#Configuration-Options) for a more detailed explanation of each option.
 
 ### Quick Start
-
-The project relies on the values in `config.ini` to operate properly. Updating these values will change which model is being trained, tested or used for predictions. Additional parameters for training can be found here as well (batch size, validation split, etc.).  See [Configuration Options](#Configuration-Options) for a more detailed explanation of each option.
 
 To perform the entire pipeline on a new model from scratch (compile, train and test), perform the following steps:
 
@@ -71,6 +66,12 @@ To perform the entire pipeline on a new model from scratch (compile, train and t
 4. Run the pipeline using these options by simply running `make`. 
 
 This will compile a new model and save a summary and its architecture in a new directory in `models/` under the name and version number given in the configuration file. The model will be trained and the results of the testing script will be saved as `.csv` in this directory. Due to the large file size of the MRI scans and limitations on RAM, training is done in groups. See [Training](#Training) for more information.
+
+### Available Commands
+* `make`: Runs the entire pipeline (see [Quick Start](#Quick-Start)). 
+* `make train`: Runs the training script for the model specified in `config.ini`. Compiles a new model if one is not found using the given name and version number in `config.ini`, otherwise loads the model and resumes training. A training log is kept in the model's directory and training params are appended to this log on each run. See [Training](#Training) for more information.
+* `make test`: Runs the test script, saving the result as a `.csv` in the model's directory. Assumes the model specified in `config.ini` can be found in `/models`. See [Testing](#Testing) for more information on the metrics used.
+* `make predict`: Runs the prediction script, will show prompt for input of patient number to predict. Creates prediction images using t1c modality as background. Saves predictions as `.png` files and creates a `.gif` from these and saves these outputs in the directory specified as `image_out_path` in `config.ini`.
 
 ### Configuration Options
 
@@ -95,15 +96,15 @@ If a model of a given name and version already exists when training, that model 
 * `start` : The start index of the patient to test on
 * `end` : The end index of the patient to test on
 
-* Explanation of how to train
-* Explanation of how to test
-* Explanation how to test pre-trained models
-* Explanation of how to predict specific patient
-
 ## Dataset
 
 The MRI data used to train this model was provided by the [2015 MICCAI BRaTS Challenge](http://www.braintumorsegmentation.org) 
 
+## Training
+
+## Testing
+
+## Results
 
 ## Setup on VM
 
@@ -125,17 +126,9 @@ aws s3 cp s3://midd-brats/brats_data brats_data --recursive
 ```
 Set up configuration for python / tensorflow
 
-​	
-
 ```
 pip3 install scikit-learn scikit-image SimpleITK tqdm	
 ```
-
-
-
-
-
-
 TODO
 - Automatic vm startup and makefiles for compiling training and predicting
 - Visualization of model
