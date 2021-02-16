@@ -52,7 +52,7 @@ python3 process.py <path_to_data> <n4itk=False>
 * Train a new model
 * Test a model
 
-The project relies on the values in `config.ini` to operate properly. Updating these values will change which model is being trained, tested or used for predictions. Additional parameters for training can be found here as well (batch size, validation split, etc.).  See [Configuration Options](#Configuration Options) for a more detailed explanation of each option.
+The project relies on the values in `config.ini` to operate properly. Updating these values will change which model is being trained, tested or used for predictions. Additional parameters for training can be found here as well (batch size, validation split, etc.).  See [Configuration Options](#Configuration-Options) for a more detailed explanation of each option.
 
 To perform the entire pipeline on a new model from scratch (compile, train and test), perform the following steps:
 
