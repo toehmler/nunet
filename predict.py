@@ -7,7 +7,7 @@ from glob import glob
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage.exposure import adjust_gamma, rescale_intensity
-from skimage import color
+from skimage import color, img_as_float
 import imageio
 
 
@@ -16,9 +16,18 @@ def save_mask(bg, mask, patient_no, out_path, model_str, slice_no):
     twos = np.argwhere(mask == 2)
     threes = np.argwhere(mask == 3)
     fours = np.argwhere(mask == 4)
-    bg = color.gray2rgb(bg)
+
+#    bg /= np.max(bg)
+#    gray_img = img_as_float(bg)
+#    img = adjust_gamma(color.gray2rgb(gray_img), 1)
+#    bg_copy = img.copy()
+
+    
+
+    # scale intensity between 0-1
+    bg = (bg - np.min(bg)) / (np.max(bg) - np.min(bg))
 #    bg = rescale_intensity(bg, in_range=(0,1))
-    bg = adjust_gamma(bg, 0.65)
+    bg = adjust_gamma(color.gray2rgb(bg), 1) 
     bg_copy = bg.copy()
 
     red = [1, 0.2, 0.2]
@@ -26,7 +35,10 @@ def save_mask(bg, mask, patient_no, out_path, model_str, slice_no):
     green = [0.35, 0.75, 0.25]
     blue = [0, 0.25, 0.9]
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(3,3),
+                     dpi=80,
+                     frameon=False,
+                     edgecolor='black')
     for i in range(ones.shape[0]):
         bg_copy[ones[i][0]][ones[i][1]] = red
     for i in range(twos.shape[0]):
@@ -35,18 +47,19 @@ def save_mask(bg, mask, patient_no, out_path, model_str, slice_no):
         bg_copy[threes[i][0]][threes[i][1]] = blue 
     for i in range(fours.shape[0]):
         bg_copy[fours[i][0]][fours[i][1]] = yellow
-    plt.imshow(bg_copy)
+    fig.figimage(bg_copy)
+    #plt.imshow(bg_copy)
     plt.savefig('{}/{}_pat{}_slice{}.png'.format(out_path, model_str, patient_no, slice_no))
     plt.close(fig)
 
 
 
 def create_gif(out_path, model_str, patient_no):
-    images = glob('{}/{}_pat{}*.png'.format(out_path, model_str, patient_no))
     img_list = []
-    for fname in images:
-        img_list.append(imageio.imread(fname))
-    imageio.imwrite('{}/{}_pat{}.gif', img_list)
+    for i in range(155):
+        image = glob('{}/{}_pat{}_slice{}.png'.format(out_path, model_str, patient_no, i))[0]
+        img_list.append(imageio.imread(image))
+    imageio.mimwrite('{}/{}_pat{}.gif'.format(out_path, model_str, patient_no), img_list)
 
 if __name__ == "__main__":
     patient_no = input("Patient no: ")
@@ -77,9 +90,8 @@ if __name__ == "__main__":
         prediction = np.around(prediction)
         prediction = np.argmax(prediction, axis=-1)
         # [flair, t1, t1c, t2, gt]
-        scan = test_slice[0,:,:,2] # should use t1c scan as background
+        scan = test_slice[0,:,:,2] 
         save_mask(scan, prediction, patient_no, out_path, model_str, slice_no)
-        create_gif(out_path, model_str, patient_no)
         '''
         label = test_label[0]
         im = plt.figure(figsize=(15,10))
@@ -97,5 +109,7 @@ if __name__ == "__main__":
         '''
         pbar.update(1)
     pbar.close()
+
+    create_gif(out_path, model_str, patient_no)
 
 
