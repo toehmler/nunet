@@ -17,17 +17,10 @@ def save_mask(bg, mask, patient_no, out_path, model_str, slice_no):
     threes = np.argwhere(mask == 3)
     fours = np.argwhere(mask == 4)
 
-#    bg /= np.max(bg)
-#    gray_img = img_as_float(bg)
-#    img = adjust_gamma(color.gray2rgb(gray_img), 1)
-#    bg_copy = img.copy()
-
-    
-
     # scale intensity between 0-1
     bg = (bg - np.min(bg)) / (np.max(bg) - np.min(bg))
 #    bg = rescale_intensity(bg, in_range=(0,1))
-    bg = adjust_gamma(color.gray2rgb(bg), 1) 
+    bg = adjust_gamma(color.gray2rgb(bg), 1)
     bg_copy = bg.copy()
 
     red = [1, 0.2, 0.2]
@@ -52,6 +45,53 @@ def save_mask(bg, mask, patient_no, out_path, model_str, slice_no):
     plt.savefig('{}/{}_pat{}_slice{}.png'.format(out_path, model_str, patient_no, slice_no))
     plt.close(fig)
 
+def save_dual_mask(bg, pred, label, pat_no, out_path, model_str, slice_no):
+    ones = np.argwhere(pred == 1)
+    twos = np.argwhere(pred == 2)
+    threes = np.argwhere(pred == 3)
+    fours = np.argwhere(pred == 4)
+
+    gt_ones = np.argwhere(label == 1)
+    gt_twos = np.argwhere(label == 2)
+    gt_threes = np.argwhere(label == 3)
+    gt_fours = np.argwhere(label == 4)
+
+    bg = (bg - np.min(bg)) / (np.max(bg) - np.min(bg))
+    bg = adjust_gamma(color.gray2rgb(bg), 1)
+    bg_copy = bg.copy()
+    truth_bg = bg.copy()
+
+    ones_color = [1,0.2,0.2] # red
+    twos_color = [1,1,0.25] # yellow
+    threes_color = [0.35,0.75,0.25] # green
+    fours_color = [0,0.25,0.9] # blue
+
+    fig = plt.figure(figsize=(6,3),dpi=80,edgecolor='black',frameon=False)
+
+    plt.subplot(121)
+    for i in range(ones.shape[0]):
+        bg_copy[ones[i][0]][ones[i][1]] = ones_color
+    for i in range(twos.shape[0]):
+        bg_copy[twos[i][0]][twos[i][1]] = twos_color
+    for i in range(threes.shape[0]):
+        bg_copy[threes[i][0]][threes[i][1]] = threes_color
+    for i in range(fours.shape[0]):
+        bg_copy[fours[i][0]][fours[i][1]] = fours_color
+    fig.figimage(bg_copy)
+
+    plt.subplot(122)
+    for i in range(gt_ones.shape[0]):
+        truth_bg[gt_ones[i][0]][gt_ones[i][1]] = ones_color
+    for i in range(gt_twos.shape[0]):
+        truth_bg[gt_twos[i][0]][gt_twos[i][1]] = twos_color
+    for i in range(gt_threes.shape[0]):
+        truth_bg[gt_threes[i][0]][gt_threes[i][1]] = threes_color
+    for i in range(gt_fours.shape[0]):
+        truth_bg[gt_fours[i][0]][gt_fours[i][1]] = fours_color
+    fig.figimage(truth_bg)
+
+    plt.savefig('{}/{}_pat{}_slice{}_dual.png'.format(out_path, model_str, patient_no, slice_no))
+    plt.close(fig)
 
 
 def create_gif(out_path, model_str, patient_no):
