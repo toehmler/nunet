@@ -70,7 +70,7 @@ To perform the entire pipeline on a new model from scratch (compile, train and t
 3. Update any of the training and testing options as needed
 4. Run the pipeline using these options by simply running `make`. 
 
-This will compile a new model and save a summary and its architecture in a new directory in `models/` under the name and version number given in the configuration file. The model will be trained and the results of the testing script will be saved as `.csv` in this directory.
+This will compile a new model and save a summary and its architecture in a new directory in `models/` under the name and version number given in the configuration file. The model will be trained and the results of the testing script will be saved as `.csv` in this directory. Due to the large file size of the MRI scans and limitations on RAM, training is done in groups. See [Training](#Training) for more information.
 
 ### Configuration Options
 
@@ -90,7 +90,6 @@ If a model of a given name and version already exists when training, that model 
 * `epochs` : Number of epochs to train for *per group*
 * `batch_size` : The batch size to train the model using *per group*   
 * `validation_split` : The split to use to create the validation data (0-1), done on *per group* basis
-Due to the large file size of the MRI scans and limitations on RAM, training is done in groups. See [Training](#Training) for more information.
 **Testing**
 * `start` : The start index of the patient to test on
 * `end` : The end index of the patient to test on
