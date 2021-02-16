@@ -2,6 +2,8 @@
 
 This project demonstrates the implementation of a 2D UNet Convolution Neural Network to segment regions of High-Grade Glioma brain tumors. The model implemented is based on this [paper](https://arxiv.org/abs/1505.04597).  The model was trained using data from the 2015 MICCAI BRaTS Challenge. For more information please see the [dataset](#dataset) section.
 
+![unet_v0.2_pat206](./outputs/unet_v0.2_pat206.gif)
+
 ## Background / Overview
 ### What is brain tumor segmentation?
 * What is brain tumor segmentation?
@@ -23,7 +25,6 @@ This project demonstrates the implementation of a 2D UNet Convolution Neural Net
 * SimpleITK
 * tqdm
 
-
 ### Setup
 1. Install [Tensorflow](tensorflow.org), it is recommended that you have version 2.4.0+
 2. Install [Keras](keras.io), it is recommended  that you have version 2.4.0+
@@ -36,12 +37,12 @@ git clone https://github.com/toehmler/nunet.git
 ```
 pip3 install -r requirements.txt
 ```
-6. Download the data from the [MICCAI BRaTS Website](https://www.med.upenn.edu/cbica/brats2020/data.html) 
-7. Set `path_to_data`  in `config.ini`  to be the full path to the downloaded dataset.
-8. Run the preprocessing script to perform N4ITK bias correction and rename the patient directories
+6. Download the dataset from the [MICCAI BRaTS Website](https://www.med.upenn.edu/cbica/brats2020/data.html) 
+7. Run the preprocessing script to perform N4ITK bias correction and rename the patient directories. Bias correction is only performed on the t1 and t1c modalities. The corrected scans are saved with the `_n4` suffix. Set `n4itk=False` to skip bias correction. (Note: the current script expects `.mha` files)
 ```
-python3 process.py
+python3 process.py <path_to_data> <n4itk=False>
 ```
+8. Set `path_to_data`  in `config.ini`  to be the full path to the downloaded dataset.
 
 ## Quick Start
 * Explanation of how to train
@@ -79,7 +80,6 @@ Set up configuration for python / tensorflow
 pip3 install scikit-learn scikit-image SimpleITK tqdm	
 ```
 
-[unet_v0.2_pat206](./outputs/unet_v0.2_pat206.gif)
 
 
 
