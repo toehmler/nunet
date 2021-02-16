@@ -61,25 +61,20 @@ def save_dual_mask(bg, pred, label, pat_no, out_path, model_str, slice_no):
     bg_copy = bg.copy()
     truth_bg = bg.copy()
 
+    '''
     ones_color = [1,0.2,0.2] # red
     twos_color = [1,1,0.25] # yellow
     threes_color = [0.35,0.75,0.25] # green
     fours_color = [0,0.25,0.9] # blue
+    '''
+
+    fours_color = [42/255,152/255,143/255]
+    twos_color = [233/255,196/255,106/255]
+    threes_color = [244/255,162/255,97/255]
+    ones_color = [231/255,111/255,81/255]
 
     fig = plt.figure(figsize=(6,3),dpi=80,edgecolor='black',frameon=False)
 
-    plt.subplot(121)
-    for i in range(ones.shape[0]):
-        bg_copy[ones[i][0]][ones[i][1]] = ones_color
-    for i in range(twos.shape[0]):
-        bg_copy[twos[i][0]][twos[i][1]] = twos_color
-    for i in range(threes.shape[0]):
-        bg_copy[threes[i][0]][threes[i][1]] = threes_color
-    for i in range(fours.shape[0]):
-        bg_copy[fours[i][0]][fours[i][1]] = fours_color
-    fig.figimage(bg_copy)
-
-    plt.subplot(122)
     for i in range(gt_ones.shape[0]):
         truth_bg[gt_ones[i][0]][gt_ones[i][1]] = ones_color
     for i in range(gt_twos.shape[0]):
@@ -88,7 +83,33 @@ def save_dual_mask(bg, pred, label, pat_no, out_path, model_str, slice_no):
         truth_bg[gt_threes[i][0]][gt_threes[i][1]] = threes_color
     for i in range(gt_fours.shape[0]):
         truth_bg[gt_fours[i][0]][gt_fours[i][1]] = fours_color
-    fig.figimage(truth_bg)
+    truth_im = fig.figimage(truth_bg)
+    for i in range(ones.shape[0]):
+        bg_copy[ones[i][0]][ones[i][1]] = ones_color
+    for i in range(twos.shape[0]):
+        bg_copy[twos[i][0]][twos[i][1]] = twos_color
+    for i in range(threes.shape[0]):
+        bg_copy[threes[i][0]][threes[i][1]] = threes_color
+    for i in range(fours.shape[0]):
+        bg_copy[fours[i][0]][fours[i][1]] = fours_color
+    pred_im = fig.figimage(bg_copy, xo=240)
+    test1 = plt.subplot(121)
+    gt_title = plt.title('Ground Truth', loc='left')
+    test2 = plt.subplot(122)
+    pred_title = plt.title('Prediction')
+
+
+    plt.setp(gt_title, color="w")
+    plt.setp(pred_title, color="w")
+
+    truth_im.set_zorder(0)
+    pred_im.set_zorder(0)
+    test1.set_zorder(1)
+    test2.set_zorder(1)
+    test1.patch.set_visible(False)
+    test2.patch.set_visible(False)
+    gt_title.set_zorder(1)
+    pred_title.set_zorder(1)
 
     plt.savefig('{}/{}_pat{}_slice{}_dual.png'.format(out_path, model_str, patient_no, slice_no))
     plt.close(fig)
@@ -97,7 +118,7 @@ def save_dual_mask(bg, pred, label, pat_no, out_path, model_str, slice_no):
 def create_gif(out_path, model_str, patient_no):
     img_list = []
     for i in range(155):
-        image = glob('{}/{}_pat{}_slice{}.png'.format(out_path, model_str, patient_no, i))[0]
+        image = glob('{}/{}_pat{}_slice{}_dual.png'.format(out_path, model_str, patient_no, i))[0]
         img_list.append(imageio.imread(image))
     imageio.mimwrite('{}/{}_pat{}.gif'.format(out_path, model_str, patient_no), img_list)
 
@@ -131,7 +152,7 @@ if __name__ == "__main__":
         prediction = np.argmax(prediction, axis=-1)
         # [flair, t1, t1c, t2, gt]
         scan = test_slice[0,:,:,2] 
-        save_mask(scan, prediction, patient_no, out_path, model_str, slice_no)
+        save_dual_mask(scan, prediction, test_label[0], patient_no, out_path, model_str, slice_no)
         '''
         label = test_label[0]
         im = plt.figure(figsize=(15,10))
