@@ -1,4 +1,4 @@
-# Automatic Brain Tumor Segmentation using a 2D UNet
+# Brain Tumor Segmentation using a 2D UNet
 
 This project demonstrates the implementation of a 2D UNet Convolution Neural Network to segment regions of High-Grade Glioma brain tumors. The model implemented is based on this [paper](https://arxiv.org/abs/1505.04597).  The model was trained using data from the 2015 MICCAI BRaTS Challenge. For more information please see the [dataset](#dataset) section.
 
@@ -25,17 +25,23 @@ This project demonstrates the implementation of a 2D UNet Convolution Neural Net
 
 
 ### Setup
-1. Install [Tensorflow](tensor flow.org), it is recommended that you have version 2.4.0+
+1. Install [Tensorflow](tensorflow.org), it is recommended that you have version 2.4.0+
 2. Install [Keras](keras.io), it is recommended  that you have version 2.4.0+
-3. Install [CUDA](https://www.tensorflow.org/install/gpu) and configure  GPU support for tensorflow
+3. Install [CUDA](https://www.tensorflow.org/install/gpu) and configure GPU support for tensorflow. It is recommended that you have version 11.0+
 4. Clone the project
+```
 git clone https://github.com/toehmler/nunet.git
+```
 5. Use pip to install all the dependencies
+```
 pip3 install -r requirements.txt
+```
 6. Download the data from the [MICCAI BRaTS Website](https://www.med.upenn.edu/cbica/brats2020/data.html) 
 7. Set `path_to_data`  in `config.ini`  to be the full path to the downloaded dataset.
 8. Run the preprocessing script to perform N4ITK bias correction and rename the patient directories
-`python3 process.py`
+```
+python3 process.py
+```
 
 ## Quick Start
 * Explanation of how to train
@@ -71,12 +77,9 @@ Set up configuration for python / tensorflow
 
 ```
 pip3 install scikit-learn scikit-image SimpleITK tqdm	
-
-	
-	
 ```
 
-![unet_v0.2_pat206](/Users/treyoehmler/dev/tumors/nunet/outputs/unet_v0.2_pat206.gif)
+[unet_v0.2_pat206](./outputs/unet_v0.2_pat206.gif)
 
 
 
