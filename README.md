@@ -90,6 +90,7 @@ If a model of a given name and version already exists when training, that model 
 * `epochs` : Number of epochs to train for *per group*
 * `batch_size` : The batch size to train the model using *per group*   
 * `validation_split` : The split to use to create the validation data (0-1), done on *per group* basis
+
 **Testing**
 * `start` : The start index of the patient to test on
 * `end` : The end index of the patient to test on
