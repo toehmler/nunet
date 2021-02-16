@@ -16,6 +16,7 @@ This project demonstrates the implementation of a 2D UNet Convolution Neural Net
 
 ## Installation
 ### Requirements
+* GNU Make
 * Python 3.7.9
 * Tensorflow 2.4.0
 * Keras 2.4.0
@@ -45,6 +46,34 @@ python3 process.py <path_to_data> <n4itk=False>
 8. Set `path_to_data`  in `config.ini`  to be the full path to the downloaded dataset.
 
 ## Quick Start
+
+* Generate predictions using pre trained models
+* Train and test a new model
+* Train a new model
+* Test a model
+
+The project relies on the values in `config.ini` to operate properly. Updating these values will change which model is being trained, tested or used for predictions. Additional parameters for training can be found here as well (batch size, validation split, etc.).  See [Configuration Options](#Configuration Options) for a more detailed explanation of each option.
+
+To perform the entire pipeline on a new model from scratch (compile, train and test), perform the following steps:
+
+1. Make sure `path_to_data` in `config.ini` is set as the full path to the data
+2. Set `model_name` and `version_no` in `config.ini` to be the name and version number that new model willbe saved as. (Keeping the default will load a pre-trained model)
+3. Update any of the training and testing options as needed
+4. Run the pipeline using these options by simply running `make`. 
+
+This will compile a new model and save a summary and its architecture in a new directory in `models/` under the name and version number given in the configuration file. The model will be trained and the results of the testing script will be saved as `.csv` in this directory.
+
+### Configuration Options
+
+**General**
+* `path_to_data` : Path to dataset in full, assumes patient directories have been renamed in the format `pat{x}`.
+* `image_out_path` : Path to save prediction images in full.
+
+**Model**
+* `name` : Name of the current model being trained, tested or used for predictions. 
+* `ver` : The version number of the current model being trained, tested, or used for predictions
+If a model of a given name and version already exists when training, that model is loaded, otherwise a new model is compiled.
+
 * Explanation of how to train
 * Explanation of how to test
 * Explanation how to test pre-trained models
