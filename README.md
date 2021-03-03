@@ -19,9 +19,6 @@ Our project explores a newer type of CNN-based deep learning algorithm called a 
 We first attempted this segmentation task by using a multi-pathway CNN where we first needed to create many smaller patches of pixels as input to the network to classify one at a time (the network would classify the central pixel of each patch). However, a UNet can classify slice by slice instead of patch by patch, which makes the UNet much more computationally efficient.
 
 
-![image](https://user-images.githubusercontent.com/34974716/109862307-4a310b00-7c2e-11eb-8817-1aad9a6e29e2.png)
-
-
 
 
 ### Data structure
