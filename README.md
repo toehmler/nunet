@@ -1,7 +1,5 @@
 # Brain Tumor Segmentation using a 2D UNet
 
-
-
 ![tumor_tile](./graphics/tumor_tile.jpg)
 
 This project demonstrates the implementation of a 2D UNet Convolution Neural Network to segment regions of High-Grade Glioma brain tumors. The model implemented is based on this [paper](https://arxiv.org/abs/1505.04597).  The model was trained using data from the 2015 MICCAI BRaTS Challenge. For more information please see the [dataset](#dataset) section.
@@ -22,7 +20,7 @@ Test
 
 ### Data structure
 
-### ![label_diagram](./graphics/label_diagram.jpg)
+![label_diagram](./graphics/label_diagram.jpg)
 
 ## Installation
 
