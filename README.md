@@ -34,8 +34,6 @@ All MRI scans of the brain used to validate our model were provided by the BRATS
 ![label_diagram](./graphics/label_diagram.jpg)
 
 
-## Instruction to Use Our Tool
-
 ## Installation
 
 ### Requirements
