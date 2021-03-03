@@ -20,7 +20,9 @@ Test
 
 ### Data structure
 
+![brain_grid.jpg](./graphics/brain_grid.jpg)
 ![label_diagram](./graphics/label_diagram.jpg)
+
 
 ## Installation
 
