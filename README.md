@@ -8,18 +8,22 @@ This project demonstrates the implementation of a 2D UNet Convolution Neural Net
 
 ## Background / Overview
 
+### What is Brain Tumor Segmentation (BTS)?
+
 Glioma tumors, the most common type of brain tumor, significantly reduce life expectancy in their high-grade form. While low grade gliomas (LGG) are usually removable surgically with a promising survival rate, high grade gliomas (HGG) are much more invasive. The segmentation of these HGG tumors aims to differentiate tissue regions, including regions of active tumor, necrosis, edema (swelling around a tumor) and non-tumor, in order to inform treatment. The segmentation process consists of going through each MRI slice and classifying each 3-D pixel (voxel) as a different tissue type. While segmentation is generally performed manually by radiologists, it is a highly laborious task that requires significant technical experience. Further, since HGG tumors have more undefined and irregular boundaries, segmenting them can provide additional challenges. Thus, an effective automatic segmentation method could provide a much more efficient alternative, saving radiologists and patients valuable time.
 
+### Convolutional Neural Networks for BTS
+
 Since 2013, the Perelman School of Medicine at the University of Pennsylvania has been hosting the Multimodal Brain Tumor Segmentation Challenge (BraTS), aimed at developing algorithms to automatically segment gliomas. The current state-of-the-art method for automatic brain tumor segmentation uses different forms of a deep learning algorithm called a convolutional neural network (CNN). CNNs are commonly used due to their ability to 'learn' highly non-linear functions by fine-tuning millions of weights in the network. Specifically, they are often applied to image-processing tasks because they can extract high-level features, such as edges and orientations, in a hierarchical manner. CNN-based approaches to brain tumor segmentation vary in a number of features, including dimensionality, preprocessing techniques, input structure and the order and structure of the CNN layers. 
+
+### Our UNet Approach
 
 Our project explores a newer type of CNN-based deep learning algorithm called a UNet. Introduced in May 2015 by Olaf Ronneberger and a team of researchers from the University of Freiburg in Germany, the architecture immediately stood out compared to other architectures due to how well it performed in a number of different biomedical segmentation challenges. The network is made up of a contracting (encoder) path that reduces the dimensionality of the input and a subsequent expansive (decoder) path that increases it. One key feature of the UNet architecture is the incorporation of skip connections, which allow for the concatenation of features directly from the contracting to the expansive path and play a crucial role in restoring the spatial resolution lost from the input due to downsampling. Lastly, the fully convolutional nature (no dense, fully connected layers) of the UNet allows for variably-sized inputs, while the use of transposed convolutions in the decoder path enables precise localization of features. 
 
 We first attempted this segmentation task by using a multi-pathway CNN where we first needed to create many smaller patches of pixels as input to the network to classify one at a time (the network would classify the central pixel of each patch). However, a UNet can classify slice by slice instead of patch by patch, which makes the UNet much more computationally efficient.
 
 
-
-
-### Data structure
+### Data Structure
 
 ![brain_grid.jpg](./graphics/brain_grid.jpg)
 
