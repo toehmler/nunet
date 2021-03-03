@@ -106,19 +106,9 @@ The MRI data used to train this model was provided by the [2015 MICCAI BRaTS Cha
 
 ## Training
 
-For training...
-
-
-
 ## Testing
 
 ## Results
-
-
-
-TODO
-- Automatic vm startup and makefiles for compiling training and predicting
-- Visualization of model
 
 
 
