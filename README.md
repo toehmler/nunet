@@ -14,6 +14,8 @@ This project demonstrates the implementation of a 2D UNet Convolution Neural Net
 	* Time consuming for a radiologist to manually segment 
 	* Segmentation tasks are ripe for machine learning / CNNs
 
+Test
+
 ### Data structure
 
 * Explanation of data structure
