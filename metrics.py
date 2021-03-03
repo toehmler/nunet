@@ -144,7 +144,6 @@ def specificity_core (seg,ground):
     seg_[seg_==2]=0
     ground_[ground_==2]=0
     return specificity(seg_>0,ground_>0)
-    
 
 def hausdorff_whole (seg,ground):
     return Hausdorff_distance(seg==0,ground==0)
