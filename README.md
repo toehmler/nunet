@@ -10,18 +10,30 @@ This project demonstrates the implementation of a 2D UNet Convolution Neural Net
 
 ### What is brain tumor segmentation?
 
-* What is brain tumor segmentation?
-	* Process of separating healthy / normal brain tissues from tumor
-	* Difficult because of irregular form and confusing boundaries of tumors
-	* Time consuming for a radiologist to manually segment 
-	* Segmentation tasks are ripe for machine learning / CNNs
+Glioma tumors, the most common type of brain tumor, significantly reduce life expectancy in their high-grade form. While low grade gliomas (LGG) are usually removable surgically with a promising survival rate, high grade gliomas (HGG) are much more invasive. The segmentation of these HGG tumors aims to differentiate tissue regions, including regions of active tumor, necrosis, edema (swelling around a tumor) and non-tumor, in order to inform treatment. The segmentation process consists of going through each MRI slice and classifying each 3-D pixel (voxel) as a different tissue type. While segmentation is generally performed manually by radiologists, it is a highly laborious task that requires significant technical experience. Further, since HGG tumors have more undefined and irregular boundaries, segmenting them can provide additional challenges. Thus, an effective automatic segmentation method could provide a much more efficient alternative, saving radiologists and patients valuable time.
 
-Test
+Since 2013, the Perelman School of Medicine at the University of Pennsylvania has been hosting the Multimodal Brain Tumor Segmentation Challenge (BraTS), aimed at developing algorithms to automatically segment gliomas. The current state-of-the-art method for automatic brain tumor segmentation uses different forms of a deep learning algorithm called a convolutional neural network (CNN). CNNs are commonly used due to their ability to 'learn' highly non-linear functions by fine-tuning millions of weights in the network. Specifically, they are often applied to image-processing tasks because they can extract high-level features, such as edges and orientations, in a hierarchical manner. CNN-based approaches to brain tumor segmentation vary in a number of features, including dimensionality, preprocessing techniques, input structure and the order and structure of the CNN layers. 
+
+Our project explores a newer type of CNN-based deep learning algorithm called a UNet. Introduced in May 2015 by Olaf Ronneberger and a team of researchers from the University of Freiburg in Germany, the architecture immediately stood out compared to other architectures due to how well it performed in a number of different biomedical segmentation challenges. The network is made up of a contracting (encoder) path that reduces the dimensionality of the input and a subsequent expansive (decoder) path that increases it. One key feature of the UNet architecture is the incorporation of skip connections, which allow for the concatenation of features directly from the contracting to the expansive path and play a crucial role in restoring the spatial resolution lost from the input due to downsampling. Lastly, the fully convolutional nature (no dense, fully connected layers) of the UNet allows for variably-sized inputs, while the use of transposed convolutions in the decoder path enables precise localization of features. 
+
+We first attempted this segmentation task by using a multi-pathway CNN where we first needed to create many smaller patches of pixels as input to the network to classify one at a time (the network would classify the central pixel of each patch). However, a UNet can classify slice by slice instead of patch by patch, which makes the UNet much more computationally efficient.
+
+
+![image](https://user-images.githubusercontent.com/34974716/109862307-4a310b00-7c2e-11eb-8817-1aad9a6e29e2.png)
+
+
+
 
 ### Data structure
 
 ![brain_grid.jpg](./graphics/brain_grid.jpg)
+
+
+All MRI scans of the brain used to validate our model were provided by the BRATS 2015 challenge database. This dataset consists of 220 HGG cases and 54 LGG cases. For the purposes of our experimentation, only HGG cases were utilized. Each MRI scan consists of 155 2D slices in four different modalities: T1, T1 with contrast, T2 and FLAIR. Thus, these four modalities sum to a total of 620 MRI slices for each patient. Further, each patient has a fifth image providing the 'ground truth' labels for each pixel. In this dataset, the voxel labels are as follows: '0' is non-tumor; '1' is necrosis; '2' is edema; '3' is non-enhancing tumor; '4' is enhancing tumor. There is a label for every pixel in each 240x240 voxel slice, generating 8,928,000 labels for each patient, and approximately 2 billion labels (1.96x109) for the 220 HGG cases overall. These ground truth segmentation labels are manually provided by radiologists.
+
+
 ![label_diagram](./graphics/label_diagram.jpg)
+
 
 
 ## Installation
